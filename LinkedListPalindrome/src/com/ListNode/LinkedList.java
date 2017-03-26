@@ -2,30 +2,15 @@ package com.ListNode;
 
 public class LinkedList {
 	
-	ListNode head;
+	static ListNode head;
+	static ListNode rhead;
 	int length;
 	
-	public void insertAtBegining(ListNode node){
-		node.setNext(head);
-		head = node;
-		length++;
-	}
-	
-	public void insertAtEnd(ListNode node){
-		if(head==null){
-			head = node;
-		}
-		else{
-			ListNode p,q;
-			for(p=head;(q=p.getNext())!=null;p=q);
-				p.setNext(node);
-			length++;
-		}
-	}
-	
-	public void display(ListNode head){
+
+		public void display(ListNode current){
 		
-		ListNode current = head;
+		//ListNode current = head;
+		
 		while(current!=null){
 			System.out.println(" "+current.data);
 			current = current.next;
@@ -34,70 +19,79 @@ public class LinkedList {
 	
 	public ListNode reverseList(ListNode currentnode){
 		
-		ListNode prev = null;
-		ListNode nextNode;
-		
-		while(currentnode!=null){
+	    ListNode prevnode = null;
+		ListNode nextnode;
+		while(currentnode != null){
 			
-			nextNode = currentnode.next;
-			currentnode.next = prev;
-			prev = currentnode;
-			currentnode =nextNode;
+			nextnode = currentnode.next;
+			currentnode.next = prevnode;
+			prevnode = currentnode;
+			currentnode = nextnode;
 		}
-		return prev;
+		rhead = prevnode;
+		return rhead;
 	}
+
 	
-	public boolean isListPalindrome(ListNode head){
+	public boolean compareTwoLists(ListNode head,ListNode rhead){
 		
-		if(head == null){
-			System.out.println("head is null");
-			return true;
-		}
-		
-		ListNode list = head;
-		ListNode reverseList = new ListNode(head.getData());
-		
-		while(list.next!=null){
-			ListNode temp = new ListNode(list.next.getData());
-			temp.next = reverseList;
-			reverseList = temp;
-			list = list.next;
-		}
-		ListNode list1 = head;
-		ListNode list2 = reverseList;
+	
+		LinkedList rlist = new LinkedList();
+		 rhead  = rlist.reverseList(head);
 		 
-		while(list1!= null){
-			if(list1.getData() != list2.getData()){
-				System.out.println("the list is not a palindrome");
+		
+		 LinkedList list = new LinkedList();
+		  head = list.reverseList(rhead);
+	       
+	       //checking both list heads null condition
+		while(head != null && rhead != null){
+			
+			//if not null compare both data of two lists 
+			if(head.data == rhead.data){
+				head = head.next;
+				rhead = rhead.next;
+			}
+			else 
+			{
+				System.out.println("the given linked list is not a palindrome");
 				return false;
 			}
-			list1 = list1.next;
-			list2 = list2.next;
 		}
-		System.out.println("the list is a palindrome");
+		if(head==null && rhead ==null){
+			
+			System.out.println("both the lists are empty so there are palindrome");
+				return true;
+			}
+		else{
+		System.out.println("the given linked list is  a palindrome");
+		}
 		return true;
 	}
 	public static void main(String[] args) {
+		
 		// TODO Auto-generated method stub
-       ListNode node = new ListNode("m");
-       ListNode node1 = new ListNode("a");
-       ListNode node2 = new ListNode("d");
+       ListNode node = new ListNode("1");
+       ListNode node1 = new ListNode("2");
+       ListNode node2 = new ListNode("3");
        
        LinkedList list = new LinkedList();
        
-       list.insertAtBegining(node);
-       list.insertAtEnd(node1);
-       list.insertAtEnd(node2);
+       list.head = node;
+       node.next = node1;
+       node1.next = node2;
        
        System.out.println("the current list is ");
-       list.display(node);
        
-       System.out.println(list.isListPalindrome(node));
-       ListNode afterReversingList = list.reverseList(node);
+       list.display(head);
        
-       System.out.println("the reverse of the list is ");
-       list.display(afterReversingList);
-  
+       System.out.println(list.compareTwoLists(head, rhead));
+       
+       System.out.println("the current list after reversing is... ");
+       
+       rhead  = list.reverseList(head);
+       
+       list.display(rhead);
+       
 	}
 
 }
